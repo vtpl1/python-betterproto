@@ -67,6 +67,16 @@ class {{ message.py_name }}(betterproto.Message):
     {%  endif %}
 
 
+    __annotations__ = {
+    {% for field in message.fields %}
+        {% if field.comment %}
+{{ field.comment }}
+        {% endif %}
+    "{{ field.py_name }}" : {{ field.annotation }},
+    {% endfor %}
+    }
+
+
 {% endfor %}
 {% for service in output_file.services %}
 class {{ service.py_name }}Stub(betterproto.ServiceStub):
