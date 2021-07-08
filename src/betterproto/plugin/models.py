@@ -506,7 +506,7 @@ class FieldCompiler(MessageCompiler):
     def annotation(self) -> str:
         if self.repeated:
             return f"List[{self.py_type}]"
-        return self.py_type
+        return self.py_type.strip("\"")
 
 
 @dataclass
