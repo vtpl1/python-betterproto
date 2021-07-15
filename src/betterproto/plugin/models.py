@@ -498,7 +498,7 @@ class FieldCompiler(MessageCompiler):
                 package=self.output_file.package,
                 imports=self.output_file.imports,
                 source_type=self.proto_obj.type_name,
-            )
+            ).strip("\"")
         else:
             raise NotImplementedError(f"Unknown type {field.type}")
 
@@ -506,7 +506,7 @@ class FieldCompiler(MessageCompiler):
     def annotation(self) -> str:
         if self.repeated:
             return f"List[{self.py_type}]"
-        return self.py_type.strip("\"")
+        return self.py_type
 
 
 @dataclass
