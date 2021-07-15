@@ -67,6 +67,7 @@ class {{ message.py_name }}(betterproto.Message):
     {%  endif %}
 
 
+    {% if message.fields %}
     __annotations__ = {
     {% for field in message.fields %}
         {% if field.comment %}
@@ -75,6 +76,7 @@ class {{ message.py_name }}(betterproto.Message):
     "{{ field.py_name }}" : {{ field.annotation }},
     {% endfor %}
     }
+    {% endif %}
 
 
 {% endfor %}
