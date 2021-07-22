@@ -432,6 +432,10 @@ class FieldCompiler(MessageCompiler):
         )
 
     @property
+    def optional(self) -> bool:
+        return self.proto_obj.label == FieldDescriptorProtoLabel.LABEL_OPTIONAL
+
+    @property
     def mutable(self) -> bool:
         """True if the field is a mutable type, otherwise False."""
         return self.annotation.startswith(("List[", "Dict["))
@@ -498,15 +502,18 @@ class FieldCompiler(MessageCompiler):
                 package=self.output_file.package,
                 imports=self.output_file.imports,
                 source_type=self.proto_obj.type_name,
-            ).strip("\"")
+            ).strip('"')
         else:
             raise NotImplementedError(f"Unknown type {field.type}")
 
     @property
     def annotation(self) -> str:
+        to_ret = self.py_type
         if self.repeated:
-            return f"List[{self.py_type}]"
-        return self.py_type
+            to_ret = f"List[{self.py_type}]"
+        if self.optional:
+            to_ret = f"Optional[{to_ret}]"
+        return to_ret
 
 
 @dataclass
